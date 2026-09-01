@@ -1,0 +1,21 @@
+/////////////////////////
+
+docker run -d \
+--name ubuntu-ssh1 \
+-p 3001:22 \
+ubuntu:22.04 \
+/bin/bash -c "
+apt update &&
+apt install -y openssh-server &&
+mkdir -p /run/sshd &&
+echo 'root:q123' | chpasswd &&
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config &&
+sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config &&
+/usr/sbin/sshd &&
+tail -f /dev/null
+"
+
+/// change password if you need
+passwd root
+
